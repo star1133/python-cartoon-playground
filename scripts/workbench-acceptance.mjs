@@ -1,0 +1,61 @@
+import {chromium} from '@playwright/test';
+import assert from 'node:assert/strict';
+const browser=await chromium.launch({headless:true,args:['--no-sandbox']});
+const key='python-cartoon-workbench-layout-v1';
+const url=process.env.QA_URL||'http://127.0.0.1:3102';
+try{
+ const context=await browser.newContext({viewport:{width:1440,height:1000}});const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ await page.goto(url);await page.locator('.monaco-editor').waitFor();
+ await page.getByRole('button',{name:'สลับประเภทเอดิเตอร์'}).click();await page.locator('.cm-content').waitFor();
+ await page.locator('.cm-content').fill('value = 123\nprint(value)');
+ await page.locator('.cm-content').evaluate(e=>{e.dataset.mountMarker='kept'});
+ const read=()=>page.evaluate(k=>JSON.parse(localStorage.getItem(k)),key);
+ const primary=page.getByRole('separator',{name:'ปรับขนาดแผงหลัก',exact:true});
+ let rect=await primary.boundingBox();await page.mouse.move(rect.x+rect.width/2,rect.y+rect.height/2);await page.mouse.down();await page.mouse.move(rect.x+140,rect.y+rect.height/2,{steps:8});await page.mouse.up();
+ assert.ok((await read()).primaryRatio>55);
+ const ratio=(await read()).primaryRatio;await page.reload();await primary.waitFor();assert.equal(Number(await primary.getAttribute('aria-valuenow')),ratio);
+ // CodeMirror preference is session-only; switch again after reload.
+ if(!await page.locator('.cm-content').count())await page.getByRole('button',{name:'สลับประเภทเอดิเตอร์'}).click();
+ await page.locator('.cm-content').evaluate(e=>{e.dataset.mountMarker='kept'});
+ const editor=page.locator('[data-pane-id=editor]');const scene=page.locator('[data-pane-id=scene]');const results=page.locator('[data-pane-id=results]');
+ await editor.locator('.workbench-pane-header').dragTo(scene.locator('.workbench-pane-header'));
+ assert.equal((await read()).order[0],'scene');
+ assert.equal(await page.locator('.cm-content').getAttribute('data-mount-marker'),'kept');
+ await page.getByRole('button',{name:'Columns',exact:true}).click();assert.equal((await read()).mode,'columns');
+ await page.getByRole('button',{name:'Rows',exact:true}).click();assert.equal((await read()).mode,'rows');
+ assert.equal(await page.locator('.cm-content').getAttribute('data-mount-marker'),'kept');
+ await page.getByRole('button',{name:'IDE',exact:true}).click();
+ await editor.getByRole('button',{name:/ขยาย.*เต็มจอ/}).click();assert.ok(!await scene.isVisible());
+ await page.getByRole('button',{name:'ย่อขนาดกลับปกติ',exact:true}).click();assert.ok(await scene.isVisible());
+ await results.getByRole('button',{name:/ซ่อน/}).click();assert.ok(!await results.isVisible());
+ await page.reload();assert.ok(!await results.isVisible());
+ await page.locator('.workbench-toolbar-right').getByRole('button',{name:/แสดงคืนค่า.*คอนโซล/}).click();assert.ok(await results.isVisible());
+ await primary.focus();await page.keyboard.press('End');assert.equal(Number(await primary.getAttribute('aria-valuenow')),80);await page.keyboard.press('Enter');
+ const secondary=page.getByRole('separator',{name:'ปรับขนาดแผงรอง',exact:true});await secondary.focus();await page.keyboard.press('Home');assert.equal(Number(await secondary.getAttribute('aria-valuenow')),20);await page.keyboard.press('Enter');
+ await page.getByRole('button',{name:'รีเซ็ตเลย์เอาต์',exact:true}).click();assert.deepEqual((await read()).order,['editor','scene','results']);
+ // Explanation focus: no console, fills the grid, persists after reload.
+ await page.getByRole('button',{name:'ดูคำอธิบายเต็มพื้นที่',exact:true}).click();
+ assert.ok(await scene.isVisible());assert.ok(!await editor.isVisible());assert.ok(!await results.isVisible());
+ const full=await scene.boundingBox();const host=await page.locator('.workbench-grid-host').boundingBox();assert.ok(full.width>=host.width-2 && full.height>=host.height-2);
+ await page.reload();assert.ok(await scene.isVisible());assert.ok(!await editor.isVisible());assert.ok(!await results.isVisible());
+ await page.getByRole('button',{name:'โค้ด + คำอธิบาย',exact:true}).click();
+ assert.ok(await editor.isVisible());assert.ok(!await results.isVisible());
+ assert.ok((await scene.boundingBox()).width>(await editor.boundingBox()).width*2);
+ assert.ok(parseFloat(await page.locator('.explain-panel-text').evaluate(e=>getComputedStyle(e).fontSize))>=16);
+ await page.screenshot({path:'/tmp/python-playground-qa/python-workbench-stage/explanation.png'});
+ await page.getByRole('button',{name:'รีเซ็ตเลย์เอาต์',exact:true}).click();
+ // Real execution and hidden stdin rescue.
+ if(!await page.locator('.cm-content').count())await page.getByRole('button',{name:'สลับประเภทเอดิเตอร์'}).click();
+ await page.locator('.cm-content').fill('name = input("ชื่อ: ")\nprint("สวัสดี", name)');
+ await results.getByRole('button',{name:/ซ่อน/}).click();
+ await page.getByRole('button',{name:'รันปกติ',exact:true}).click();await page.getByRole('button',{name:'รันโค้ด Python',exact:true}).click();
+ await page.getByLabel('ช่องป้อนข้อมูลอินพุต').waitFor({timeout:120000});assert.ok(await results.isVisible());
+ await page.getByLabel('ช่องป้อนข้อมูลอินพุต').fill('แม็กซ์');await page.getByRole('button',{name:'ส่งข้อมูลอินพุต'}).click();
+ await page.waitForFunction(()=>document.querySelector('.console-log-area')?.textContent.includes('สวัสดี แม็กซ์'),{timeout:30000});
+ await page.getByRole('button',{name:'ลำดับการเรียก (Call Stack)',exact:true}).click();await page.reload();
+ assert.ok(await page.getByRole('region',{name:/ลำดับการเรียก/}).isVisible());
+ assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
+ await page.screenshot({path:'/tmp/python-playground-qa/python-workbench-stage/desktop.png'});
+ assert.deepEqual(errors,[]);console.log(JSON.stringify({mouseResize:true,reloadPersistence:true,dragSwap:true,modes:true,maximize:true,hideRestore:true,keyboardResize:true,editorMountPreserved:true,realPythonThaiInput:true,inputRescuesHiddenResults:true,resultTabRemembered:true}));
+ await context.close();
+}finally{await browser.close();}

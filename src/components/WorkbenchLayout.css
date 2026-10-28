@@ -1,0 +1,474 @@
+/* ==========================================================================
+   WorkbenchLayout.css - Dark IDE Customizable Persistent Workbench Layout
+   ========================================================================== */
+
+:root {
+  --wb-sep-size: 6px;
+  --wb-header-height: 28px;
+  --wb-toolbar-height: 32px;
+}
+
+.workbench-layout-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--color-bg-base, #181818);
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* Compact Toolbar */
+.workbench-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: var(--wb-toolbar-height);
+  height: auto;
+  flex-wrap: wrap;
+  padding-block: 4px;
+  padding: 0 8px;
+  background: #202020;
+  border-bottom: 1px solid var(--color-border, #333333);
+  font-family: var(--font-sans, system-ui, sans-serif);
+  font-size: 12px;
+  color: var(--color-text-muted, #858585);
+  user-select: none;
+  flex-shrink: 0;
+  gap: 8px;
+}
+
+.workbench-toolbar-left,
+.workbench-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.workbench-toolbar-left { flex-wrap: wrap; }
+.workbench-focus-actions { display: flex; gap: 6px; }
+.workbench-focus-actions .workbench-toggle-btn { min-height: 30px; color: #e2e8f0; border-color: #3c657a; }
+.workbench-pane-scene .explain-panel { flex-shrink: 0; }
+.workbench-pane-scene .explain-panel-text { font-size: clamp(14px, 1.1vw, 17px) !important; line-height: 1.5 !important; }
+/* Compact dock so the explanation never takes over the number board above it */
+.explain-dock { flex-shrink: 0; max-height: 40%; overflow-y: auto; padding: 6px 12px; background: #181a1f; border-top: 1px solid #2d3748; }
+.explain-dock .explain-panel { padding: 6px 12px !important; gap: 2px !important; }
+/* Layout Details Menu */
+.workbench-layout-details {
+  position: relative;
+  display: inline-block;
+}
+
+.workbench-layout-summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  background: #2a2d2e;
+  color: #cccccc;
+  border: 1px solid #3c3c3c;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 500;
+  list-style: none;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.workbench-layout-summary::-webkit-details-marker {
+  display: none;
+}
+
+.workbench-layout-summary:hover,
+.workbench-layout-summary:focus-visible {
+  background: #33383a;
+  border-color: #007acc;
+  color: #ffffff;
+}
+
+.workbench-layout-icon {
+  font-size: 13px;
+  line-height: 1;
+}
+
+.workbench-layout-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 100;
+  background: #1e1e1e;
+  border: 1px solid #3c3c3c;
+  border-radius: 5px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.55);
+  padding: 6px;
+  min-width: 230px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.workbench-menu-section-title {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #858585;
+  padding: 4px 8px 2px 8px;
+  letter-spacing: 0.5px;
+}
+
+.workbench-menu-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 5px 8px;
+  background: transparent;
+  border: none;
+  border-radius: 3px;
+  color: #cccccc;
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.workbench-menu-item:hover,
+.workbench-menu-item:focus-visible {
+  background: #2a2d2e;
+  color: #ffffff;
+}
+
+.workbench-menu-item.active {
+  background: #094771;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.workbench-menu-divider {
+  height: 1px;
+  background: #333333;
+  margin: 4px 0;
+}
+
+.workbench-menu-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+  font-size: 12px;
+  color: #cccccc;
+  cursor: pointer;
+  border-radius: 3px;
+  user-select: none;
+}
+
+.workbench-menu-checkbox:hover {
+  background: #2a2d2e;
+}
+
+.workbench-menu-checkbox input[type='checkbox'] {
+  accent-color: #007acc;
+  cursor: pointer;
+}
+
+/* Mode Quick Pills */
+.workbench-mode-pill-group {
+  display: inline-flex;
+  background: #181818;
+  border: 1px solid #333333;
+  border-radius: 4px;
+  padding: 1px;
+  gap: 1px;
+}
+
+.workbench-mode-btn {
+  background: transparent;
+  border: none;
+  border-radius: 3px;
+  color: #858585;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 7px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.workbench-mode-btn:hover {
+  color: #cccccc;
+}
+
+.workbench-mode-btn.active {
+  background: #007acc;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* Visible Restore Toolbar Toggles */
+.workbench-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  background: #252526;
+  border: 1px solid #333333;
+  border-radius: 4px;
+  font-size: 11px;
+  color: #cccccc;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.workbench-toggle-btn:hover:not(:disabled) {
+  background: #2d2d30;
+  color: #ffffff;
+  border-color: #444444;
+}
+
+.workbench-toggle-btn.active {
+  color: #38bdf8;
+  border-color: #0284c7;
+}
+
+.workbench-toggle-btn.hidden {
+  opacity: 0.5;
+  color: #858585;
+  background: #181818;
+  border-style: dashed;
+}
+
+.workbench-toggle-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.workbench-restore-btn {
+  background: #7c2d12;
+  border-color: #ea580c;
+  color: #ffedd5;
+}
+
+.workbench-restore-btn:hover {
+  background: #9a3412;
+}
+
+.workbench-reset-btn {
+  color: #a3a3a3;
+  background: transparent;
+  border-color: transparent;
+}
+
+.workbench-reset-btn:hover {
+  background: #2a2d2e;
+  color: #ffffff;
+  border-color: #3c3c3c;
+}
+
+/* Workbench Grid Host */
+.workbench-grid-host {
+  display: grid;
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* Pane Wrapper */
+.workbench-pane {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+  background: #1e1e1e;
+  border: 1px solid #2d2d30;
+  overflow: hidden;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.workbench-pane-hidden {
+  display: none !important;
+}
+
+.workbench-pane-maximized {
+  z-index: 10 !important;
+}
+
+/* Pane Header */
+.workbench-pane-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--wb-header-height);
+  padding: 0 6px 0 8px;
+  background: #252526;
+  border-bottom: 1px solid #333333;
+  font-family: var(--font-sans, system-ui, sans-serif);
+  font-size: 11px;
+  font-weight: 600;
+  color: #cccccc;
+  cursor: grab;
+  user-select: none;
+  flex-shrink: 0;
+  gap: 8px;
+  transition: background 0.15s, outline 0.15s;
+}
+
+.workbench-pane-header:active {
+  cursor: grabbing;
+}
+
+.workbench-pane-header-dragover {
+  background: rgba(0, 122, 204, 0.3) !important;
+  outline: 2px dashed #38bdf8 !important;
+  outline-offset: -2px;
+}
+
+.workbench-pane-header-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.workbench-pane-drag-handle {
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1;
+}
+
+.workbench-pane-header-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.workbench-pane-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: transparent;
+  border: none;
+  border-radius: 3px;
+  color: #858585;
+  font-size: 11px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.12s, color 0.12s;
+}
+
+.workbench-pane-btn:hover:not(:disabled) {
+  background: #333333;
+  color: #ffffff;
+}
+
+.workbench-pane-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Pane Content Body */
+.workbench-pane-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0%;
+  min-height: 0;
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  box-sizing: border-box;
+}
+
+/* Child Pane Overrides: neutralize conflicting legacy min-height/widths */
+.workbench-pane-body > * {
+  flex: 1 1 0% !important;
+  min-height: 0 !important;
+  min-width: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  border: none !important;
+}
+
+/* Resizable Separators */
+.workbench-separator {
+  background: #1e293b;
+  user-select: none;
+  touch-action: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline-offset: -2px;
+  z-index: 2;
+  transition: background 0.15s ease;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.workbench-separator-vertical {
+  cursor: col-resize;
+  width: var(--wb-sep-size);
+  height: 100%;
+}
+
+.workbench-separator-horizontal {
+  cursor: row-resize;
+  height: var(--wb-sep-size);
+  width: 100%;
+}
+
+.workbench-separator-grip {
+  border-radius: 2px;
+  background: #64748b;
+  pointer-events: none;
+  transition: background 0.15s ease;
+}
+
+.workbench-separator-vertical .workbench-separator-grip {
+  width: 2px;
+  height: 28px;
+}
+
+.workbench-separator-horizontal .workbench-separator-grip {
+  height: 2px;
+  width: 28px;
+}
+
+.workbench-separator:hover,
+.workbench-separator:focus-visible {
+  background: #164e63;
+  outline: 2px solid #38bdf8;
+}
+
+.workbench-separator:hover .workbench-separator-grip,
+.workbench-separator:focus-visible .workbench-separator-grip {
+  background: #7dd3fc;
+}
+
+/* Mobile Fallback Container */
+.workbench-layout-container.workbench-mobile .workbench-grid-host {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.workbench-layout-container.workbench-mobile .workbench-separator {
+  display: none !important;
+}
+
+.workbench-layout-container.workbench-mobile .workbench-pane {
+  min-height: 240px;
+  flex-shrink: 0;
+}

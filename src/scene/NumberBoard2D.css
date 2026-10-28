@@ -1,0 +1,784 @@
+/* NumberBoard2D.css - Scoped styles for 2D Front-Facing Number & Arrow Flow Explanation Board */
+
+.number-board-2d,
+.nb2d-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 220px;
+  background-color: #14171d;
+  color: #e2e8f0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  overflow-y: auto;
+  padding: 12px;
+  box-sizing: border-box;
+}
+
+.nb2d-teaching-card { border: 1px solid #334155; border-left: 3px solid #38bdf8; border-radius: 10px; padding: 12px 14px; margin: 10px 0; background: #182230; font-size: 13px; line-height: 1.65; overflow-wrap: anywhere; }
+.nb2d-teaching-card p { margin: 6px 0; }
+.nb2d-teaching-question { color: #7dd3fc; }
+.nb2d-teaching-card summary { cursor: pointer; color: #cbd5e1; }
+.nb2d-teaching-observed { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+.nb2d-teaching-observed code { background: #0f172a; padding: 4px 8px; border-radius: 6px; max-width: 100%; overflow-wrap: anywhere; }
+.nb2d-teaching-observed small { color: #94a3b8; }
+
+.nb2d-stable-state { padding: 12px; }
+.nb2d-stable-heading { font-size: 13px; color: #cbd5e1; margin-bottom: 10px; }
+.nb2d-stable-heading span, .nb2d-stable-label { color: #94a3b8; font-size: 11px; }
+.nb2d-stable-heading span { margin-left: 8px; }
+.nb2d-stable-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr)); gap: 10px; }
+.nb2d-stable-card { border: 1px solid #334155; border-radius: 10px; background: #17202b; padding: 12px; min-width: 0; }
+.nb2d-stable-name { color: #7dd3fc; font: 13px monospace; overflow-wrap: anywhere; }
+.nb2d-stable-name small { color: #94a3b8; font-size: 10px; }
+.nb2d-stable-value { margin: 10px 0; color: #e2e8f0; font: 18px monospace; overflow-wrap: anywhere; white-space: pre-wrap; }
+.nb2d-stable-number { color: #d4f4ff; font-size: 32px; font-weight: 600; text-shadow: 0 0 10px #38bdf833; }
+.nb2d-stable-note { color: #94a3b8; font-size: 11px; margin: 10px 0 0; }
+
+/* Header bar */
+.nb2d-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #232936;
+}
+
+.nb2d-badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.nb2d-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.nb2d-badge-mode {
+  background-color: #13273e;
+  color: #38bdf8;
+  border: 1px solid #0284c7;
+}
+
+.nb2d-badge-stack {
+  background-color: #272314;
+  color: #facc15;
+  border: 1px solid #854d0e;
+}
+
+.nb2d-badge-loop {
+  background-color: #1e3a5f;
+  color: #93c5fd;
+  border: 1px solid #2563eb;
+}
+
+.nb2d-active-line-box {
+  background-color: #1b2029;
+  border: 1px solid #2e3646;
+  border-radius: 4px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+  color: #94a3b8;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nb2d-active-line-num {
+  color: #38bdf8;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* =========================================================================
+   Flow Explanation Section (Prominent Front-Facing Arrow-Guided Tutorial)
+   ========================================================================= */
+.nb2d-flow-section {
+  background: linear-gradient(180deg, #181d27 0%, #151922 100%);
+  border: 1px solid #2c3649;
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+}
+
+.nb2d-flow-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #252e3e;
+}
+
+.nb2d-flow-phase-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.nb2d-phase-btn {
+  background-color: #1e2532;
+  color: #e2e8f0;
+  border: 1px solid #333f54;
+  border-radius: 5px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+}
+
+.nb2d-phase-btn:hover:not(:disabled) {
+  background-color: #273245;
+  border-color: #38bdf8;
+  color: #38bdf8;
+}
+
+.nb2d-phase-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.nb2d-phase-pills {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background-color: #11141c;
+  padding: 3px;
+  border-radius: 6px;
+  border: 1px solid #242c3b;
+}
+
+.nb2d-phase-pill {
+  background: transparent;
+  color: #94a3b8;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.nb2d-phase-pill:hover:not(:disabled) {
+  color: #e2e8f0;
+}
+
+.nb2d-phase-pill-active {
+  background-color: #0c3358 !important;
+  color: #38bdf8 !important;
+  border-color: #0284c7 !important;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.25);
+}
+
+.nb2d-phase-pill-done {
+  background-color: #11282a;
+  color: #34d399;
+}
+
+.nb2d-phase-desc-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #131a26;
+  border-left: 3px solid #38bdf8;
+  padding: 6px 10px;
+  border-radius: 0 4px 4px 0;
+  font-size: 12px;
+}
+
+.nb2d-phase-tag {
+  background-color: #0c2d4a;
+  color: #38bdf8;
+  font-weight: 700;
+  font-size: 11px;
+  padding: 1px 6px;
+  border-radius: 3px;
+  border: 1px solid #0284c7;
+  white-space: nowrap;
+}
+
+.nb2d-phase-text {
+  color: #f1f5f9;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* Flow Arena & Visual Tracks */
+.nb2d-flow-arena {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 4px 0;
+}
+
+.nb2d-flow-track {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  background-color: #11141c;
+  border: 1px solid #232a39;
+  border-radius: 8px;
+  padding: 12px 16px;
+}
+
+/* Keep connected arrows pointing at the next node on narrow boards. */
+@media (max-width: 767px) {
+  .nb2d-flow-track { flex-direction: column; flex-wrap: nowrap; }
+  .nb2d-flow-arrow { min-height: 84px; }
+  .nb2d-arrow-svg-wrap { transform: rotate(90deg); margin: 18px 0; }
+  .nb2d-arrow-badge { display: none; }
+  .nb2d-node { max-width: 100%; box-sizing: border-box; }
+}
+
+/* Individual Data Flow Nodes */
+.nb2d-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 110px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background-color: #1a1f2b;
+  border: 2px solid #2b3548;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease;
+}
+
+.nb2d-node-sublabel {
+  font-size: 10px;
+  font-weight: 600;
+  color: #818cf8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 2px;
+}
+
+.nb2d-node-val {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', ui-monospace, monospace;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.1;
+  word-break: break-all;
+  color: #f8fafc;
+}
+
+.nb2d-node-prev-val {
+  color: #94a3b8;
+  text-decoration: line-through;
+  opacity: 0.85;
+}
+
+.nb2d-node-current-val {
+  color: #38bdf8;
+}
+
+.nb2d-node-dest-name {
+  font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+  font-size: 22px;
+  font-weight: 700;
+  color: #facc15;
+}
+
+.nb2d-node-dest-badge {
+  font-family: ui-monospace, monospace;
+  font-size: 11px;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+
+/* Node highlight & active states */
+.nb2d-node-highlighted {
+  border-color: #38bdf8 !important;
+  background-color: #152840 !important;
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.35);
+  transform: scale(1.03);
+}
+
+.nb2d-node-subtle {
+  opacity: 0.65;
+  border-color: #232a39;
+}
+
+.nb2d-node-confirmed {
+  border-color: #059669;
+  background-color: #0d2922;
+}
+
+.nb2d-node-stored {
+  border-color: #eab308 !important;
+  background-color: #2a240c !important;
+  box-shadow: 0 0 16px rgba(234, 179, 8, 0.35) !important;
+}
+
+.nb2d-node-waiting {
+  opacity: 0.45;
+  border-style: dashed;
+}
+
+/* =========================================================================
+   SVG Animated Flow Arrows
+   ========================================================================= */
+.nb2d-flow-arrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 64px;
+  transition: opacity 0.3s ease, color 0.3s ease;
+}
+
+.nb2d-arrow-svg-wrap {
+  width: 64px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nb2d-arrow-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.nb2d-arrow-active {
+  color: #38bdf8;
+  opacity: 1;
+}
+
+.nb2d-arrow-active .nb2d-arrow-svg line {
+  stroke: #38bdf8;
+  stroke-dasharray: 60;
+  stroke-dashoffset: 60;
+  animation: nb2dArrowDraw 0.45s ease-out forwards;
+}
+
+.nb2d-arrow-active .nb2d-arrow-svg path {
+  fill: #38bdf8;
+}
+
+.nb2d-arrow-inactive {
+  color: #334155;
+  opacity: 0.25;
+}
+
+.nb2d-arrow-inactive .nb2d-arrow-svg line {
+  stroke: #475569;
+  stroke-dasharray: 4 4;
+}
+
+.nb2d-arrow-badge {
+  font-size: 10px;
+  display: none;
+}
+
+.nb2d-arrow-caption {
+  font-size: 10px;
+  font-weight: 600;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+
+@keyframes nb2dArrowDraw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Honest No-Change State */
+.nb2d-no-change-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: #121620;
+  border: 1px dashed #2c3547;
+  border-radius: 6px;
+  padding: 12px 16px;
+  color: #94a3b8;
+}
+
+.nb2d-no-change-icon {
+  font-size: 22px;
+}
+
+.nb2d-no-change-content strong {
+  display: block;
+  font-size: 13px;
+  color: #cbd5e1;
+  margin-bottom: 2px;
+}
+
+.nb2d-no-change-content p {
+  margin: 0;
+  font-size: 12px;
+}
+
+/* =========================================================================
+   Empty State
+   ========================================================================= */
+.nb2d-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 32px 16px;
+  background-color: #181c24;
+  border: 1px dashed #2d3544;
+  border-radius: 8px;
+  margin: auto 0;
+}
+
+.nb2d-empty-icon {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.nb2d-empty-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #f1f5f9;
+  margin-bottom: 6px;
+}
+
+.nb2d-empty-desc {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.5;
+  max-width: 480px;
+  margin-bottom: 12px;
+}
+
+.nb2d-empty-tips {
+  font-size: 12px;
+  color: #64748b;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+.nb2d-tip-item {
+  background: #1e2430;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid #283142;
+}
+
+/* =========================================================================
+   Variables Grid Section
+   ========================================================================= */
+.nb2d-variables-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.nb2d-section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.nb2d-heading-text {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #64748b;
+  margin: 0;
+}
+
+.nb2d-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.nb2d-card {
+  display: flex;
+  flex-direction: column;
+  background-color: #1a1e27;
+  border: 1px solid #2a313f;
+  border-radius: 8px;
+  padding: 10px 12px;
+  position: relative;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.nb2d-card-changed {
+  border-color: #38bdf8;
+  background-color: #14253b;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.12);
+}
+
+.nb2d-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.nb2d-var-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #f8fafc;
+  font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+}
+
+.nb2d-type-badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-family: ui-monospace, monospace;
+  text-transform: lowercase;
+}
+
+.nb2d-type-int {
+  background-color: #0e3b43;
+  color: #2dd4bf;
+}
+
+.nb2d-type-float {
+  background-color: #064e3b;
+  color: #34d399;
+}
+
+.nb2d-type-str {
+  background-color: #451a03;
+  color: #fb923c;
+}
+
+.nb2d-type-container {
+  background-color: #3b0764;
+  color: #c084fc;
+}
+
+.nb2d-type-bool {
+  background-color: #422006;
+  color: #facc15;
+}
+
+.nb2d-type-other {
+  background-color: #27272a;
+  color: #a1a1aa;
+}
+
+/* Front-facing large number */
+.nb2d-number-val {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', ui-monospace, monospace;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.15;
+  color: #38bdf8;
+  letter-spacing: -0.5px;
+  margin: 4px 0;
+  word-break: break-all;
+}
+
+.nb2d-val-float {
+  color: #34d399 !important;
+}
+
+.nb2d-val-negative {
+  color: #fb7185 !important;
+}
+
+.nb2d-val-non-number {
+  font-size: 16px;
+  font-family: ui-monospace, monospace;
+  color: #e2e8f0;
+  margin: 4px 0;
+  word-break: break-all;
+}
+
+/* Value change / transfer indicator inside cards */
+.nb2d-transfer-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  margin-top: 4px;
+  color: #94a3b8;
+  padding-top: 4px;
+  border-top: 1px solid #283242;
+}
+
+.nb2d-prev-val {
+  text-decoration: line-through;
+  opacity: 0.7;
+  color: #94a3b8;
+  font-family: ui-monospace, monospace;
+}
+
+.nb2d-transfer-arrow {
+  color: #38bdf8;
+  font-weight: bold;
+}
+
+.nb2d-current-val {
+  font-weight: 700;
+  color: #f8fafc;
+  font-family: ui-monospace, monospace;
+}
+
+.nb2d-new-badge {
+  font-size: 10px;
+  background-color: #064e3b;
+  color: #6ee7b7;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+/* Container / List elements */
+.nb2d-container-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.nb2d-container-chip {
+  background-color: #10141d;
+  border: 1px solid #2d3544;
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 11px;
+  font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+  color: #e2e8f0;
+}
+
+.nb2d-omitted-notice {
+  background-color: #1e2430;
+  border: 1px solid #2d3647;
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+/* Stdout display panel */
+.nb2d-stdout-panel {
+  background-color: #0b0e14;
+  border: 1px solid #232b38;
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin-top: 6px;
+}
+
+.nb2d-stdout-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: #64748b;
+  margin-bottom: 4px;
+  letter-spacing: 0.5px;
+}
+
+.nb2d-stdout-text {
+  font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+  font-size: 12px;
+  color: #4ade80;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+/* Exception display alert */
+.nb2d-exception-panel {
+  background-color: #3b0b0b;
+  border: 1px solid #b91c1c;
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin-top: 6px;
+  color: #fecaca;
+}
+
+.nb2d-exception-text {
+  font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* CSS Keyframe Animation for changes */
+@keyframes nb2dPop {
+  0% {
+    transform: translateX(18px);
+    opacity: 0.35;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.nb2d-val-changed {
+  animation: nb2dPop 480ms ease-out;
+}
+
+/* =========================================================================
+   Accessible Reduced Motion Overrides (Tier 2/3 Softened, No Vestibular Motion)
+   ========================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  .number-board-2d *,
+  .number-board-2d *::before,
+  .number-board-2d *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .nb2d-val-changed,
+  .nb2d-card-changed,
+  .nb2d-number-val,
+  .nb2d-node,
+  .nb2d-node-highlighted,
+  .nb2d-arrow-active .nb2d-arrow-svg line {
+    animation: none !important;
+    transform: none !important;
+    transition: opacity 150ms ease, background-color 150ms ease, border-color 150ms ease !important;
+  }
+}
+
+.nb2d-reduced-motion .nb2d-val-changed,
+.nb2d-reduced-motion .nb2d-node,
+.nb2d-reduced-motion .nb2d-node-highlighted,
+.nb2d-reduced-motion .nb2d-arrow-active .nb2d-arrow-svg line {
+  animation: none !important;
+  transform: none !important;
+  transition: opacity 150ms ease, background-color 150ms ease, border-color 150ms ease !important;
+}
+
+/* Compact density: keep the board readable without scrolling in a short scene pane */
+.nb2d-container { padding: 8px 10px; }
+.nb2d-header { margin-bottom: 6px; padding-bottom: 6px; }
+.nb2d-teaching-card { padding: 8px 12px; margin: 6px 0; line-height: 1.5; }
+.nb2d-teaching-card p { margin: 3px 0; }
+.nb2d-teaching-observed { margin-top: 4px; }
+.nb2d-flow-section { padding: 8px 10px; margin-bottom: 8px; }
+.nb2d-flow-toolbar { gap: 6px; margin-bottom: 6px; padding-bottom: 6px; }
+.nb2d-stable-state { padding: 6px; }
+.nb2d-stable-heading { margin-bottom: 6px; }
+.nb2d-stable-card { padding: 8px; }
+.nb2d-stable-value { margin: 6px 0; }

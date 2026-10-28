@@ -1,0 +1,361 @@
+/* ==========================================================================
+   Python Cartoon Playground - VS Code Dark+ & Thai-First Craft Floor CSS
+   ========================================================================== */
+
+:root {
+  --font-sans: 'Sarabun', 'Noto Sans Thai', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, 'Courier New', monospace;
+
+  /* VS Code Dark+ Palette */
+  --color-bg-base: #181818;
+  --color-bg-sidebar: #252526;
+  --color-bg-editor: #1e1e1e;
+  --color-bg-hover: #2a2d2e;
+  --color-border: #333333;
+  --color-border-subtle: #2d2d30;
+
+  /* Text Colors */
+  --color-text-primary: #cccccc;
+  --color-text-bright: #ffffff;
+  --color-text-muted: #858585;
+  --color-text-link: #3794ff;
+
+  /* Brand & Status Colors */
+  --color-accent: #007acc;
+  --color-accent-hover: #0098ff;
+  --color-success: #2ea043;
+  --color-danger: #f14c4c;
+  --color-warning: #cca700;
+  --color-info: #4fc1ff;
+
+  /* Execution Highlight (Coexists with syntax highlight) */
+  --color-exec-highlight: rgba(255, 215, 0, 0.22);
+  --color-exec-border: #ffd54f;
+
+  /* Radius & Shadows */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--color-bg-base);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-editor);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #424242;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #4f4f4f;
+}
+
+/* Focus Visible Rings */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}
+
+/* Text Selection */
+::selection {
+  background: #264f78;
+  color: #ffffff;
+}
+
+/* Spin Keyframes */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Monaco Execution Line Highlight Styles */
+.monaco-execution-line-highlight {
+  background: var(--color-exec-highlight) !important;
+  border-left: 3px solid var(--color-exec-border) !important;
+}
+
+.monaco-execution-glyph-arrow {
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ffd54f'%3E%3Cpolygon points='5 3 19 12 5 21 5 3'/%3E%3C/svg%3E") no-repeat center center;
+  background-size: 10px 10px;
+}
+
+/* Responsive Workbench Layout */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--color-bg-base);
+}
+
+.main-workbench {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Desktop Split Layout */
+.workbench-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 320px;
+  border-right: 1px solid var(--color-border);
+  overflow: hidden;
+}
+
+.workbench-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 320px;
+  overflow: hidden;
+}
+
+.right-top-scene {
+  flex: 1;
+  min-height: 260px;
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid var(--color-border);
+  position: relative;
+  overflow: hidden;
+}
+
+.right-bottom-tabs {
+  flex: 1;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--color-bg-sidebar);
+}
+
+.panel-resize-handle { flex: 0 0 12px; cursor: row-resize; touch-action: none; user-select: none; background: #1e293b; display: flex; align-items: center; justify-content: center; outline-offset: -2px; }
+.panel-resize-handle span { width: 44px; height: 3px; border-radius: 4px; background: #64748b; pointer-events: none; }
+.panel-resize-handle:hover, .panel-resize-handle:focus-visible { background: #164e63; outline: 2px solid #38bdf8; }
+.panel-resize-handle:hover span, .panel-resize-handle:focus-visible span { background: #7dd3fc; }
+
+/* Mobile Tab Nav */
+.mobile-tab-nav {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .main-workbench {
+    flex-direction: column;
+  }
+
+  .mobile-tab-nav {
+    display: flex;
+    background: var(--color-bg-sidebar);
+    border-bottom: 1px solid var(--color-border);
+    overflow-x: auto;
+  }
+
+  .mobile-tab-button {
+    flex: 1;
+    padding: 10px 8px;
+    font-size: 12px;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    white-space: nowrap;
+    text-align: center;
+  }
+
+  .mobile-tab-button.active {
+    color: var(--color-text-bright);
+    border-bottom-color: var(--color-accent);
+    font-weight: 600;
+  }
+
+  .workbench-left, .workbench-right {
+    border-right: none;
+    min-width: 100%;
+  }
+}
+
+/* Mobile workbench: viewport follows browser chrome/keyboard; nested panes may scroll. */
+.app-container { height: 100dvh; padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
+.toolbar-more > summary { display: none; }
+.toolbar-more:not([open]) > .toolbar-secondary { display: flex !important; }
+.is-mobile .main-workbench { flex-direction: column; min-height: 120px; }
+.is-mobile .mobile-tab-nav { display: flex; flex-shrink: 0; overflow-x: auto; background: #252526; }
+.is-mobile .mobile-tab-button { flex: 1; min-height: 44px; padding: 8px; white-space: nowrap; color: #cbd5e1; background: transparent; border: 0; border-bottom: 2px solid transparent; }
+.is-mobile .mobile-tab-button.active { color: #fff; border-bottom-color: #38bdf8; }
+.is-mobile .workbench-left, .is-mobile .workbench-right { min-width: 0; width: 100%; min-height: 0; border: 0; }
+.is-mobile .right-top-scene, .is-mobile .right-bottom-tabs { min-height: 0; }
+.is-mobile button, .is-mobile select, .is-mobile summary { min-height: 44px; touch-action: manipulation; }
+.is-mobile .btn-icon { min-width: 44px; justify-content: center; }
+.is-mobile .run-toolbar { padding: 6px 8px !important; max-height: 38dvh; overflow-y: auto; flex-shrink: 0; }
+.is-mobile .toolbar-more { width: 100%; }
+.is-mobile .toolbar-more > summary { display: block; cursor: pointer; padding: 8px; background: #30343b; border-radius: 6px; }
+.is-mobile .toolbar-more:not([open]) > .toolbar-secondary { display: none !important; }
+.is-mobile .toolbar-secondary { padding-top: 6px; }
+.is-mobile .replay-cache-controls { flex-shrink: 0; max-height: 20dvh; overflow-y: auto; font-size: 11px !important; padding: 4px 8px !important; gap: 6px !important; }
+.is-mobile .replay-cache-controls > span { display: none; }
+.is-mobile .replay-cache-controls label { width: 100%; }
+.is-mobile .editor-sub-header { flex-wrap: wrap; gap: 4px; padding: 4px 8px !important; }
+.is-mobile .editor-sub-header > div { min-width: 0; flex-wrap: wrap; }
+.is-mobile .cm-editor { font-size: 16px !important; }
+.is-mobile .cm-scroller { overflow: auto; }
+.is-mobile .console-panel input { font-size: 16px !important; min-width: 0; min-height: 44px; }
+.is-mobile .console-log-area { min-height: 0 !important; }
+.is-mobile .console-panel > div:first-child { flex-wrap: wrap; gap: 4px; }
+.is-mobile .console-panel form { flex-shrink: 0; }
+.is-mobile .number-board-2d { min-height: 0; padding: 8px; }
+.is-mobile .nb2d-flow-phase-nav { flex-wrap: wrap; }
+.is-mobile .nb2d-flow-phase-nav button { min-width: 44px; }
+.is-mobile .nb2d-flow-row { flex-wrap: wrap; }
+.is-mobile .nb2d-node { max-width: 100%; min-width: 0; }
+.is-mobile .modal-backdrop { padding: 8px !important; }
+.is-mobile .modal-content { max-height: calc(100dvh - 16px) !important; }
+.is-mobile .package-row { flex-wrap: wrap; gap: 10px; }
+.is-mobile .package-row > div { min-width: 0; width: 100%; }
+.is-mobile .package-row > div > div:first-child { flex-wrap: wrap; }
+@media (max-height: 500px) and (pointer: coarse) {
+ .is-mobile .replay-cache-controls { display: none !important; }
+ .is-mobile .run-toolbar { max-height: 32dvh; }
+ .is-mobile .editor-sub-header > div > span:last-child { display: none; }
+}
+
+.is-mobile .mobile-tab-button { font-size: 12px; min-width: 0; padding: 6px 4px; }
+.is-mobile .vscode-status-bar { flex-shrink: 0; height: 28px !important; white-space: nowrap; overflow: hidden; gap: 8px; }
+.is-mobile .vscode-status-bar > div { min-width: 0; gap: 8px !important; }
+.is-mobile .vscode-status-bar > div:first-child { flex: 1; overflow: hidden; }
+.is-mobile .vscode-status-bar > div:last-child > :not(:first-child) { display: none !important; }
+.is-mobile .vscode-status-bar > div:last-child { max-width: 50%; overflow: hidden; font-size: 10px; }
+.is-mobile .vscode-status-bar svg { flex-shrink: 0; }
+
+/* Reduced Motion Override */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ==========================================================================
+   UI Redesign: Icons, Animation Mode Promotion & Explanation Polish
+   ========================================================================== */
+
+/* Explanation text entrance animation: slide in 8px from bottom + fade in, 200ms ease-out */
+@keyframes explainSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.explain-panel-text {
+  animation: explainSlideIn 200ms ease-out;
+}
+
+/* Explain card left border accent */
+.explain-panel {
+  border-left: 3px solid #2d3748;
+  transition: border-left 0.2s ease-out;
+}
+
+.explain-card-active {
+  border-left: 3px solid #38bdf8 !important;
+}
+
+/* Why panel smooth max-height transition (0 -> 800px via max-height trick, 250ms ease-out) */
+.explain-why-expand {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  border-color: transparent !important;
+  transition: max-height 250ms ease-out, opacity 250ms ease-out, padding 250ms ease-out, margin-top 250ms ease-out, border-color 250ms ease-out;
+}
+
+.explain-why-expand.open {
+  max-height: 800px;
+  opacity: 1;
+  margin-top: 4px !important;
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+  border-color: #3730a3 !important;
+}
+
+/* Animation mode button pulsing glow effect (alternating glow intensity 0.35 -> 0.15 opacity, 2s infinite) */
+@keyframes animGlowPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 2px #38bdf8, 0 0 12px rgba(56, 189, 248, 0.35);
+  }
+  50% {
+    box-shadow: 0 0 0 2px #38bdf8, 0 0 12px rgba(56, 189, 248, 0.15);
+  }
+}
+
+.btn-mode-anim-active {
+  box-shadow: 0 0 0 2px #38bdf8, 0 0 12px rgba(56, 189, 248, 0.35);
+  animation: animGlowPulse 2s infinite ease-in-out;
+}
+
+/* Touch on the desktop layout (iPad landscape, large tablets): 44px targets. */
+@media (pointer: coarse) {
+  .app-container:not(.is-mobile) button,
+  .app-container:not(.is-mobile) select,
+  .app-container:not(.is-mobile) summary { min-height: 44px; touch-action: manipulation; }
+  .app-container:not(.is-mobile) .btn-icon,
+  .app-container:not(.is-mobile) .workbench-pane-btn { width: 44px; height: 44px; }
+  .app-container:not(.is-mobile) .workbench-pane-header { min-height: 44px; }
+  .timeline-bar button { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; touch-action: manipulation; }
+  .is-mobile .timeline-bar { gap: 6px !important; padding: 4px 8px !important; }
+}

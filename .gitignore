@@ -1,0 +1,14 @@
+node_modules/
+dist/
+public/runtime/
+.cache/
+.runtime/
+*.log
+.env
+.env.*
+__pycache__/
+.pytest_cache/
+playwright-report/
+test-results/
+*.lock.pid
+.impeccable/review/

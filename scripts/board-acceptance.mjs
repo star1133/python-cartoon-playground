@@ -1,0 +1,42 @@
+import { chromium } from '@playwright/test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+const out='/tmp/python-playground-qa/python-board-demo';fs.mkdirSync(out,{recursive:true});
+const browser=await chromium.launch({args:['--no-sandbox','--enable-unsafe-swiftshader']});
+const context=await browser.newContext({viewport:{width:1440,height:900},recordVideo:{dir:out,size:{width:1440,height:900}}});
+const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(String(e)));
+const code='prices = [120, 80, 50]\ntotal = 0\nfor price in prices:\n    total += price\nprint("Total:", total)\n';
+await context.addInitScript(c=>localStorage.setItem('python_playground_draft_code',c),code);
+await page.goto(process.env.QA_URL||'http://127.0.0.1:3100',{waitUntil:'networkidle'});
+await page.waitForSelector('.number-board-2d');assert.equal(await page.locator('.scene-container canvas').count(),0);
+await page.getByRole('button',{name:'รันโค้ด Python',exact:true}).click();
+await page.waitForFunction(()=>document.body.innerText.includes('Total: 250'),null,{timeout:120000});
+await page.getByTitle('ขั้นตอนแรกสุด',{exact:true}).click();
+await page.waitForTimeout(250);
+const snapshots=[];
+for(let i=0;i<30;i++){
+ const next=page.getByTitle('ก้าวไปข้างหน้า 1 ขั้น',{exact:true});
+ if(!await next.isEnabled())break;
+ await next.click();
+ const cards=await page.locator('.nb2d-card').allTextContents();snapshots.push(cards);
+ if(cards.some(c=>c.includes('total')&&c.includes('120')&&c.includes('0'))){await page.screenshot({path:out+'/number-change.png'});}
+ await page.waitForTimeout(500);
+}
+if(await page.getByTitle('ขั้นตอนล่าสุด',{exact:true}).isEnabled())await page.getByTitle('ขั้นตอนล่าสุด',{exact:true}).click();await page.waitForTimeout(500);
+assert.ok((await page.locator('.number-board-2d').innerText()).includes('250'));
+assert.ok(snapshots.some(cards=>cards.some(c=>c.includes('total')&&c.includes('120'))));
+await page.getByTitle('ขั้นตอนแรกสุด',{exact:true}).click();
+assert.ok(!(await page.locator('.number-board-2d').innerText()).includes('Total: 250'));
+await page.emulateMedia({reducedMotion:'reduce'});
+await page.getByTitle('ขั้นตอนล่าสุด',{exact:true}).click();await page.screenshot({path:out+'/board-reduced.png'});
+const world='from playground_world import move_forward\nfor step in range(4):\n    move_forward()\nprint("World done")\n';
+await page.locator('input[type="file"]').setInputFiles({name:'world.py',mimeType:'text/x-python',buffer:Buffer.from(world)});
+await page.getByRole('button',{name:'รันโค้ด Python',exact:true}).click();
+await page.waitForFunction(()=>document.body.innerText.includes('World done'),null,{timeout:120000});
+await page.waitForSelector('canvas');assert.equal(await page.locator('.number-board-2d').count(),0);
+await page.screenshot({path:out+'/world-3d.png'});
+await page.locator('input[type="file"]').setInputFiles({name:'numbers.py',mimeType:'text/x-python',buffer:Buffer.from('zero = 0\nnegative = -42\nfraction = 3.14159\nprint("Numeric done")\n')});
+await page.getByRole('button',{name:'รันโค้ด Python',exact:true}).click();await page.waitForFunction(()=>document.body.innerText.includes('Numeric done'),null,{timeout:120000});
+const values=await page.locator('.nb2d-number-val').allTextContents();for(const n of ['0','-42','3.14159'])assert.ok(values.includes(n));
+await page.screenshot({path:out+'/numbers-final.png'});assert.deepEqual(errors,[]);
+const video=page.video();await context.close();await browser.close();fs.writeFileSync(out+'/evidence.json',JSON.stringify({errors,snapshots,values},null,2));console.log('VIDEO',await video.path());console.log('PASS board, values, backwards seek, reduced motion, actual world 3D');
